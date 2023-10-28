@@ -4,7 +4,7 @@ import Header from './components/layout/Header';
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
 import About from './components/pages/About';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 
 import './App.css';
@@ -49,35 +49,33 @@ class App extends Component {
         completed: false
       })
       .then(res => {
-        res.data.id = uuid.v4();
+        res.data.id = uuidv4();
         this.setState({ todos: [...this.state.todos, res.data] });
       });
   };
 
   render() {
     return (
-      <Router>
+      <BrowserRouter>
         <div className="App">
           <div className="container">
             <Header />
+            <Routes>
             <Route
-              exact
               path="/"
-              render={props => (
-                <React.Fragment>
-                  <AddTodo addTodo={this.addTodo} />
-                  <Todos
-                    todos={this.state.todos}
-                    markComplete={this.markComplete}
-                    delTodo={this.delTodo}
-                  />
-                </React.Fragment>
-              )}
+              element={
+              <React.Fragment>
+                <AddTodo addTodo={this.addTodo} />
+                <Todos todos={this.state.todos}
+                  markComplete = {this.markComplete} 
+                  delTodo = {this.delTodo} />
+              </React.Fragment>}
             />
-            <Route path="/about" component={About} />
+            <Route path="about" element={<About />} />
+            </Routes>
           </div>
         </div>
-      </Router>
+      </BrowserRouter>
     );
   }
 }
